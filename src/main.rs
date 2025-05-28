@@ -4,6 +4,7 @@ use axum::{
     Json, Router,
 };
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[tokio::main]
 async fn main() {
@@ -20,8 +21,10 @@ async fn root() -> &'static str {
 }
 
 async fn create_user(Json(payload): Json<CreateUser>) -> (StatusCode, Json<User>) {
-    let user = User {
-        id: 1337,
+    let id: Uuid = Uuid::new_v4();
+
+    let user: User = User {
+        id,
         username: payload.username,
     };
 
@@ -35,6 +38,6 @@ struct CreateUser {
 
 #[derive(Serialize)]
 struct User {
-    id: u64,
+    id: Uuid,
     username: String,
 }
